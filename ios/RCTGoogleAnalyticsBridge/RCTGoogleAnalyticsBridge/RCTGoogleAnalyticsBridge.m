@@ -67,32 +67,10 @@ RCT_EXPORT_METHOD(trackTiming:(NSString *)trackerId category:(nonnull NSString *
                                                             label:label] build]];
 }
 
-RCT_EXPORT_METHOD(trackPurchaseEvent:(NSString *)trackerId product:(NSDictionary *)product transaction:(NSDictionary *)transaction eventCategory:(NSString *)eventCategory eventAction:(NSString *)eventAction)
+RCT_EXPORT_METHOD(trackPurchaseEvent:(NSString *)trackerId product:(NSArray *)products transaction:(NSDictionary *)transaction eventCategory:(NSString *)eventCategory eventAction:(NSString *)eventAction)
 {
     id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:trackerId];
-    NSString *productId = [RCTConvert NSString:product[@"id"]];
-    NSString *productName = [RCTConvert NSString:product[@"name"]];
-    NSString *productCategory = [RCTConvert NSString:product[@"category"]];
-    NSString *productBrand = [RCTConvert NSString:product[@"brand"]];
-    NSString *productVariant = [RCTConvert NSString:product[@"variant"]];
-    NSNumber *productPrice = [RCTConvert NSNumber:product[@"price"]];
-    NSString *productCouponCode = [RCTConvert NSString:product[@"couponCode"]];
-    NSNumber *productQuantity = [RCTConvert NSNumber:product[@"quantity"]];
-    NSString *transactionId = [RCTConvert NSString:transaction[@"id"]];
-    NSString *transactionAffiliation = [RCTConvert NSString:transaction[@"affiliation"]];
-    NSNumber *transactionRevenue = [RCTConvert NSNumber:transaction[@"revenue"]];
-    NSNumber *transactionTax = [RCTConvert NSNumber:transaction[@"tax"]];
-    NSNumber *transactionShipping = [RCTConvert NSNumber:transaction[@"shipping"]];
-    NSString *transactionCouponCode = [RCTConvert NSString:transaction[@"couponCode"]];
-    GAIEcommerceProduct *ecommerceProduct = [[GAIEcommerceProduct alloc] init];
-    [ecommerceProduct setId:productId];
-    [ecommerceProduct setName:productName];
-    [ecommerceProduct setCategory:productCategory];
-    [ecommerceProduct setBrand:productBrand];
-    [ecommerceProduct setVariant:productVariant];
-    [ecommerceProduct setPrice:productPrice];
-    [ecommerceProduct setCouponCode:productCouponCode];
-    [ecommerceProduct setQuantity:productQuantity];
+    
     GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:eventCategory
                                                                            action:eventAction
                                                                             label:nil
@@ -106,7 +84,33 @@ RCT_EXPORT_METHOD(trackPurchaseEvent:(NSString *)trackerId product:(NSDictionary
     [action setShipping:transactionShipping];
     [action setCouponCode:transactionCouponCode];
     [builder setProductAction:action];
-    [builder addProduct:ecommerceProduct];
+    
+    for (id in products){
+        NSString *productId = [RCTConvert NSString:product[@"id"]];
+        NSString *productName = [RCTConvert NSString:product[@"name"]];
+        NSString *productCategory = [RCTConvert NSString:product[@"category"]];
+        NSString *productBrand = [RCTConvert NSString:product[@"brand"]];
+        NSString *productVariant = [RCTConvert NSString:product[@"variant"]];
+        NSNumber *productPrice = [RCTConvert NSNumber:product[@"price"]];
+        NSString *productCouponCode = [RCTConvert NSString:product[@"couponCode"]];
+        NSNumber *productQuantity = [RCTConvert NSNumber:product[@"quantity"]];
+        NSString *transactionId = [RCTConvert NSString:transaction[@"id"]];
+        NSString *transactionAffiliation = [RCTConvert NSString:transaction[@"affiliation"]];
+        NSNumber *transactionRevenue = [RCTConvert NSNumber:transaction[@"revenue"]];
+        NSNumber *transactionTax = [RCTConvert NSNumber:transaction[@"tax"]];
+        NSNumber *transactionShipping = [RCTConvert NSNumber:transaction[@"shipping"]];
+        NSString *transactionCouponCode = [RCTConvert NSString:transaction[@"couponCode"]];
+        GAIEcommerceProduct *ecommerceProduct = [[GAIEcommerceProduct alloc] init];
+        [ecommerceProduct setId:productId];
+        [ecommerceProduct setName:productName];
+        [ecommerceProduct setCategory:productCategory];
+        [ecommerceProduct setBrand:productBrand];
+        [ecommerceProduct setVariant:productVariant];
+        [ecommerceProduct setPrice:productPrice];
+        [ecommerceProduct setCouponCode:productCouponCode];
+        [ecommerceProduct setQuantity:productQuantity];
+        [builder addProduct:ecommerceProduct];
+    }
     [tracker send:[builder build]];
 }
 
