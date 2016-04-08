@@ -76,6 +76,12 @@ RCT_EXPORT_METHOD(trackPurchaseEvent:(NSString *)trackerId product:(NSArray *)pr
                                                                             label:nil
                                                                             value:nil];
     GAIEcommerceProductAction *action = [[GAIEcommerceProductAction alloc] init];
+    NSString *transactionId = [RCTConvert NSString:transaction[@"id"]];
+    NSString *transactionAffiliation = [RCTConvert NSString:transaction[@"affiliation"]];
+    NSNumber *transactionRevenue = [RCTConvert NSNumber:transaction[@"revenue"]];
+    NSNumber *transactionTax = [RCTConvert NSNumber:transaction[@"tax"]];
+    NSNumber *transactionShipping = [RCTConvert NSNumber:transaction[@"shipping"]];
+    NSString *transactionCouponCode = [RCTConvert NSString:transaction[@"couponCode"]];
     [action setAction:kGAIPAPurchase];
     [action setTransactionId:transactionId];
     [action setAffiliation:transactionAffiliation];
@@ -94,12 +100,7 @@ RCT_EXPORT_METHOD(trackPurchaseEvent:(NSString *)trackerId product:(NSArray *)pr
         NSNumber *productPrice = [RCTConvert NSNumber:product[@"price"]];
         NSString *productCouponCode = [RCTConvert NSString:product[@"couponCode"]];
         NSNumber *productQuantity = [RCTConvert NSNumber:product[@"quantity"]];
-        NSString *transactionId = [RCTConvert NSString:transaction[@"id"]];
-        NSString *transactionAffiliation = [RCTConvert NSString:transaction[@"affiliation"]];
-        NSNumber *transactionRevenue = [RCTConvert NSNumber:transaction[@"revenue"]];
-        NSNumber *transactionTax = [RCTConvert NSNumber:transaction[@"tax"]];
-        NSNumber *transactionShipping = [RCTConvert NSNumber:transaction[@"shipping"]];
-        NSString *transactionCouponCode = [RCTConvert NSString:transaction[@"couponCode"]];
+        
         GAIEcommerceProduct *ecommerceProduct = [[GAIEcommerceProduct alloc] init];
         [ecommerceProduct setId:productId];
         [ecommerceProduct setName:productName];
