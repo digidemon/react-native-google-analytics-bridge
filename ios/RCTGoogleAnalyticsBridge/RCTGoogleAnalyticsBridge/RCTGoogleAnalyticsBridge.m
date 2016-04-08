@@ -91,7 +91,7 @@ RCT_EXPORT_METHOD(trackPurchaseEvent:(NSString *)trackerId product:(NSArray *)pr
     [action setCouponCode:transactionCouponCode];
     [builder setProductAction:action];
     
-    for (id in products){
+    for (id product in products){
         NSString *productId = [RCTConvert NSString:product[@"id"]];
         NSString *productName = [RCTConvert NSString:product[@"name"]];
         NSString *productCategory = [RCTConvert NSString:product[@"category"]];
